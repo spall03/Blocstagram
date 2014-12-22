@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BLCDataSource.h"
+#import "BLCMedia.h"
+#import "BLCUser.h"
+#import "BLCComment.h"
 
 @interface BLCImagesTableViewController : UITableViewController
-@property (nonatomic, strong) NSMutableArray *images;
+
 
 @end
