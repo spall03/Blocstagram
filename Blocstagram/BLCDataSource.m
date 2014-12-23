@@ -57,6 +57,8 @@
             BLCMedia *media = [[BLCMedia alloc] init];
             media.user = [self randomUser]; //add a random user
             media.image = image; //add image to media object
+            NSUInteger wordCount = arc4random_uniform(20);
+            media.caption = [self randomSentence:wordCount]; //multi-word random caption
             
             NSUInteger commentCount = arc4random_uniform(10);
             NSMutableArray *randomComments = [NSMutableArray array];
@@ -98,6 +100,14 @@
     
     NSUInteger wordCount = arc4random_uniform(20);
     
+    comment.text = [self randomSentence:wordCount];
+    
+    return comment;
+}
+
+- (NSString *) randomSentence:(NSUInteger) wordCount
+{
+    
     NSMutableString *randomSentence = [[NSMutableString alloc] init];
     
     for (int i  = 0; i <= wordCount; i++)
@@ -106,9 +116,8 @@
         [randomSentence appendFormat:@"%@ ", randomWord]; //generate gibberish
     }
     
-    comment.text = randomSentence;
     
-    return comment;
+    return randomSentence;
 }
 
 - (NSString *) randomStringOfLength:(NSUInteger) len
