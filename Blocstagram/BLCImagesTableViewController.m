@@ -94,7 +94,7 @@
         BLCMedia *item = [self items][indexPath.row];
         [[self items] removeObject:item];
         
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade]; 
         
     }
     else if (editingStyle == UITableViewCellEditingStyleInsert)
