@@ -1,11 +1,11 @@
+
 //
 //  BLCMediaTableViewCell.m
 //  Blocstagram
 //
-//  Created by Stephen Palley on 12/22/14.
-//  Copyright (c) 2014 Steve Palley. All rights reserved.
+//  Created by Aaron on 6/23/14.
+//  Copyright (c) 2014 Bloc. All rights reserved.
 //
-
 
 #import "BLCMediaTableViewCell.h"
 #import "BLCMedia.h"
@@ -14,26 +14,28 @@
 
 @interface BLCMediaTableViewCell ()
 
+@property (nonatomic, strong) UIImageView *mediaImageView;
+@property (nonatomic, strong) UILabel *usernameAndCaptionLabel;
+@property (nonatomic, strong) UILabel *commentLabel;
+
 @property (nonatomic, strong) NSLayoutConstraint *imageHeightConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *usernameAndCaptionLabelHeightConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *commentLabelHeightConstraint;
 
-
 @end
 
-//formatting variables
 static UIFont *lightFont;
 static UIFont *boldFont;
+
 static UIColor *usernameLabelGray;
 static UIColor *commentLabelGray;
 static UIColor *linkColor;
-static NSParagraphStyle *paragraphStyle;
 
+static NSParagraphStyle *paragraphStyle;
 
 @implementation BLCMediaTableViewCell
 
-+ (void)load
-{
++ (void)load {
     lightFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:11];
     boldFont = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11];
     usernameLabelGray = [UIColor colorWithRed:0.933 green:0.933 blue:0.933 alpha:1]; /*#eeeeee*/
@@ -52,90 +54,30 @@ static NSParagraphStyle *paragraphStyle;
 + (CGFloat) heightForMediaItem:(BLCMedia *)mediaItem width:(CGFloat)width {
     // Make a cell
     BLCMediaTableViewCell *layoutCell = [[BLCMediaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"layoutCell"];
+    layoutCell.mediaItem = mediaItem;
     
     layoutCell.frame = CGRectMake(0, 0, width, CGRectGetHeight(layoutCell.frame));
     
     [layoutCell setNeedsLayout];
     [layoutCell layoutIfNeeded];
     
+    // Get the actual height required for the cell
     return CGRectGetMaxY(layoutCell.commentLabel.frame);
 }
-
-- (void) setMediaItem:(BLCMedia *)mediaItem
-{
-    _mediaItem = mediaItem; //this is the implicitly generated IVAR during runtime
-    self.mediaImageView.image = _mediaItem.image;
-    self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
-    self.commentLabel.attributedText = [self commentString];
-    
-    
-    self.imageHeightConstraint.constant = self.mediaItem.image.size.height / self.mediaItem.image.size.width * CGRectGetWidth(self.contentView.bounds); //aspect ratio calculation
-}
-
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    
-    CGSize maxSize = CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX);
-    CGSize usernameLabelSize = [self.usernameAndCaptionLabel sizeThatFits:maxSize];
-    CGSize commentLabelSize = [self.commentLabel sizeThatFits:maxSize];
-    
-    self.usernameAndCaptionLabelHeightConstraint.constant = usernameLabelSize.height + 20; //calculating padding for autolayouts
-    self.commentLabelHeightConstraint.constant = commentLabelSize.height + 20;
-    
-    
-    // Hide the line between cells
-    self.separatorInset = UIEdgeInsetsMake(0, 0, 0, CGRectGetWidth(self.bounds));
-}
-
-- (NSAttributedString *) usernameAndCaptionString {
-    CGFloat usernameFontSize = 15;
-    
-    // Make a string that says "username caption text"
-    NSString *baseString = [NSString stringWithFormat:@"%@ %@", self.mediaItem.user.userName, self.mediaItem.caption];
-    
-    // Make an attributed string, with the "username" bold
-    NSMutableAttributedString *mutableUsernameAndCaptionString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : [lightFont fontWithSize:usernameFontSize], NSParagraphStyleAttributeName : paragraphStyle}];
-    
-    NSRange usernameRange = [baseString rangeOfString:self.mediaItem.user.userName];
-    [mutableUsernameAndCaptionString addAttribute:NSFontAttributeName value:[boldFont fontWithSize:usernameFontSize] range:usernameRange]; //change font for user name
-    [mutableUsernameAndCaptionString addAttribute:NSForegroundColorAttributeName value:linkColor range:usernameRange];
-    
-    return mutableUsernameAndCaptionString;
-}
-
-- (NSAttributedString *) commentString {
-    NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] init];
-    
-    for (BLCComment *comment in self.mediaItem.comments) //format all comments for that item
-    {
-        // Make a string that says "username comment text" followed by a line break
-        NSString *baseString = [NSString stringWithFormat:@"%@ %@\n", comment.from.userName, comment.text];
-        
-        // Make an attributed string, with the "username" bold
-        
-        NSMutableAttributedString *oneCommentString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : lightFont, NSParagraphStyleAttributeName : paragraphStyle}];
-        
-        NSRange usernameRange = [baseString rangeOfString:comment.from.userName];
-        [oneCommentString addAttribute:NSFontAttributeName value:boldFont range:usernameRange];
-        [oneCommentString addAttribute:NSForegroundColorAttributeName value:linkColor range:usernameRange]; //bold and color user names
-        
-        [commentString appendAttributedString:oneCommentString]; //put comments together
-    }
-    
-    return commentString;
-}
-
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
         self.mediaImageView = [[UIImageView alloc] init];
+        
         self.usernameAndCaptionLabel = [[UILabel alloc] init];
+        self.usernameAndCaptionLabel.numberOfLines = 0;
+        self.usernameAndCaptionLabel.backgroundColor = usernameLabelGray;
+        
         self.commentLabel = [[UILabel alloc] init];
         self.commentLabel.numberOfLines = 0;
+        self.commentLabel.backgroundColor = commentLabelGray;
         
         for (UIView *view in @[self.mediaImageView, self.usernameAndCaptionLabel, self.commentLabel]) {
             [self.contentView addSubview:view];
@@ -147,7 +89,11 @@ static NSParagraphStyle *paragraphStyle;
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_mediaImageView]|" options:kNilOptions metrics:nil views:viewDictionary]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_usernameAndCaptionLabel]|" options:kNilOptions metrics:nil views:viewDictionary]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_commentLabel]|" options:kNilOptions metrics:nil views:viewDictionary]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_mediaImageView][_usernameAndCaptionLabel][_commentLabel]" options:kNilOptions metrics:nil views:viewDictionary]];
+        
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_mediaImageView][_usernameAndCaptionLabel][_commentLabel]"
+                                                                                 options:kNilOptions
+                                                                                 metrics:nil
+                                                                                   views:viewDictionary]];
         
         self.imageHeightConstraint = [NSLayoutConstraint constraintWithItem:_mediaImageView
                                                                   attribute:NSLayoutAttributeHeight
@@ -173,18 +119,87 @@ static NSParagraphStyle *paragraphStyle;
                                                                          attribute:NSLayoutAttributeNotAnAttribute
                                                                         multiplier:1
                                                                           constant:100];
+        
+        [self.contentView addConstraints:@[self.imageHeightConstraint, self.usernameAndCaptionLabelHeightConstraint, self.commentLabelHeightConstraint]];
     }
     return self;
 }
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     // Initialization code
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
+- (void) layoutSubviews {
+    [super layoutSubviews];
+    
+    // Before layout, calculate the intrinsic size of the labels (the size they "want" to be), and add 20 to the height for some vertical padding.
+    CGSize maxSize = CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX);
+    CGSize usernameLabelSize = [self.usernameAndCaptionLabel sizeThatFits:maxSize];
+    CGSize commentLabelSize = [self.commentLabel sizeThatFits:maxSize];
+    
+    self.usernameAndCaptionLabelHeightConstraint.constant = usernameLabelSize.height + 20;
+    self.commentLabelHeightConstraint.constant = commentLabelSize.height + 20;
+    
+    // Hide the line between cells
+    self.separatorInset = UIEdgeInsetsMake(0, 0, 0, CGRectGetWidth(self.bounds));
+}
+
+- (void) setMediaItem:(BLCMedia *)mediaItem {
+    _mediaItem = mediaItem;
+    self.mediaImageView.image = _mediaItem.image;
+    self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
+    self.commentLabel.attributedText = [self commentString];
+    
+    self.imageHeightConstraint.constant = self.mediaItem.image.size.height / self.mediaItem.image.size.width * CGRectGetWidth(self.contentView.bounds);
+}
+
+#pragma mark - Attributed Strings
+
+- (NSAttributedString *) usernameAndCaptionString {
+    CGFloat usernameFontSize = 15;
+    
+    // Make a string that says "username caption text"
+    NSString *baseString = [NSString stringWithFormat:@"%@ %@", self.mediaItem.user.userName, self.mediaItem.caption];
+    
+    // Make an attributed string, with the "username" bold
+    NSMutableAttributedString *mutableUsernameAndCaptionString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : [lightFont fontWithSize:usernameFontSize], NSParagraphStyleAttributeName : paragraphStyle}];
+    
+    NSRange usernameRange = [baseString rangeOfString:self.mediaItem.user.userName];
+    [mutableUsernameAndCaptionString addAttribute:NSFontAttributeName value:[boldFont fontWithSize:usernameFontSize] range:usernameRange];
+    [mutableUsernameAndCaptionString addAttribute:NSForegroundColorAttributeName value:linkColor range:usernameRange];
+    
+    return mutableUsernameAndCaptionString;
+}
+
+- (NSAttributedString *) commentString {
+    NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] init];
+    
+    for (BLCComment *comment in self.mediaItem.comments) {
+        // Make a string that says "username comment text" followed by 2 line breaks
+        NSString *baseString = [NSString stringWithFormat:@"%@ %@\n", comment.from.userName, comment.text];
+        
+        // Make an attributed string, with the "username" bold
+        
+        NSMutableAttributedString *oneCommentString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : lightFont, NSParagraphStyleAttributeName : paragraphStyle}];
+        
+        NSRange usernameRange = [baseString rangeOfString:comment.from.userName];
+        [oneCommentString addAttribute:NSFontAttributeName value:boldFont range:usernameRange];
+        [oneCommentString addAttribute:NSForegroundColorAttributeName value:linkColor range:usernameRange];
+        
+        [commentString appendAttributedString:oneCommentString];
+    }
+    
+    return commentString;
+}
+
 @end
+
+
