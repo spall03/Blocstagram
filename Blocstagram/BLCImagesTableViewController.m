@@ -167,13 +167,12 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     [self infiniteScrollIfNecessary];
-    NSLog(@"scrollViewDidEndDragging: got called");
+    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView      // called when scroll view grinds to a halt
 {
     [self infiniteScrollIfNecessary];
-    NSLog(@"scrollViewDidEndDecelerating: got called");
 }
 /*
 // Override to support rearranging the table view.
