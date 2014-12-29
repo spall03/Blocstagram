@@ -32,18 +32,18 @@
 
     [super viewDidLoad];
     
-    [[BLCDataSource sharedInstance] addObserver:self forKeyPath:@"mediaItems" options:0 context:nil];
+    [[BLCDataSource sharedInstance] addObserver:self forKeyPath:@"mediaItems" options:0 context:nil]; //register for KVO
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refreshControlDidFire:) forControlEvents:UIControlEventValueChanged];
     
 
-    [self.tableView registerClass:[BLCMediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"];
+    [self.tableView registerClass:[BLCMediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"]; //this has to do with scrolling cells off the screen???
     
 }
 
 - (void) refreshControlDidFire:(UIRefreshControl *) sender {
-    [[BLCDataSource sharedInstance] requestNewItemsWithCompletionHandler:^(NSError *error) {
+    [[BLCDataSource sharedInstance] requestNewItemsWithCompletionHandler:^(NSError *error) { //get new stuff to populate cells via pull to refresh or infinite scrolling
         [sender endRefreshing];
     }];
 }
@@ -67,8 +67,8 @@
             // Convert this NSIndexSet to an NSArray of NSIndexPaths (which is what the table view animation methods require)
             NSMutableArray *indexPathsThatChanged = [NSMutableArray array];
             [indexSetOfChanges enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-                NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:idx inSection:0];
-                [indexPathsThatChanged addObject:newIndexPath];
+                NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:idx inSection:0]; //loop through and transmute to NSIndexPaths
+                [indexPathsThatChanged addObject:newIndexPath]; //stack up new NSIndexPaths in our new NSMutableArray
             }];
             
             // Call `beginUpdates` to tell the table view we're about to make changes
@@ -123,7 +123,16 @@
     return [BLCMediaTableViewCell heightForMediaItem:item width:CGRectGetWidth(self.view.frame)];
 }
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    BLCMedia *item = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
+    if (item.image) {
+        return 350;
+    } else {
+        return 150;
+    }
+}
 
+//prepare new cell to appear on screen???
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     BLCMediaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mediaCell" forIndexPath:indexPath];

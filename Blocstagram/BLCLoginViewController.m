@@ -25,16 +25,11 @@ NSString *const BLCLoginViewControllerDidGetAccessTokenNotification = @"BLCLogin
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    NSString *urlString = [NSString stringWithFormat:@"https://instagram.com/oauth/authorize/?client_id=%@&redirect_uri=%@&response_type=token", [BLCDataSource instagramClientID], [self redirectURI]];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    if (url) {
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-        self.title = @"Login";
-        [self.webView loadRequest:request];
 
-       
-    }
+    NSMutableURLRequest *request = [self buildInstagramURL];
+    self.title = @"Login";
+    [self.webView loadRequest:request];
+
 }
 
 - (void)loadView {
@@ -45,9 +40,15 @@ NSString *const BLCLoginViewControllerDidGetAccessTokenNotification = @"BLCLogin
     self.webView = webView;
     self.view = webView;
     
-    self.homeButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.homeButton setTitle:NSLocalizedString(@"Home", @"Home button") forState:UIControlStateNormal];
-    [self.homeButton addTarget:self.webView action:@selector(homeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton* newHomeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    newHomeButton.contentEdgeInsets = UIEdgeInsetsMake( 2, 2, 2, 2 ); // Let's add some padding to our button title
+    [newHomeButton setTitle:NSLocalizedString(@"Home", @"Home button") forState:UIControlStateNormal];
+    [newHomeButton addTarget:self action:@selector(homeButtonPressed:) forControlEvents:UIControlEventTouchUpInside]; // The target should be 'self', not 'self.webView', as UIWebView doesn't respond to this selector, homeButtonPressed:
+    newHomeButton.backgroundColor = [UIColor redColor]; // Add a dash of color so we can see our button
+    [newHomeButton sizeToFit]; // This will ask UIKit to resize the button appropriately, given the title we've given it.
+    [newHomeButton setFrame:CGRectMake( 10, self.navigationController.navigationBar.frame.size.height + newHomeButton.frame.size.height, newHomeButton.frame.size.width, newHomeButton.frame.size.height)]; // Let's pin it to the top left corner, beneath our navigationBar title.
+    self.homeButton = newHomeButton;
+    
     [self.webView addSubview:self.homeButton];
     
 
@@ -55,12 +56,20 @@ NSString *const BLCLoginViewControllerDidGetAccessTokenNotification = @"BLCLogin
 
 - (void) homeButtonPressed:(UIButton *) sender
 {
-    NSString *urlString = [NSString stringWithFormat:@"https://instagram.com/oauth/authorize/?client_id=%@&redirect_uri=%@&response_type=token", [BLCDataSource instagramClientID], [self redirectURI]];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [self buildInstagramURL];
     
     [self.webView loadRequest:request];
     
+}
+
+- (NSMutableURLRequest *) buildInstagramURL
+{
+    NSString *urlString = [NSString stringWithFormat:@"https://instagram.com/oauth/authorize/?client_id=%@&redirect_uri=%@&response_type=token", [BLCDataSource instagramClientID], [self redirectURI]];
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    return request;
 }
      
 - (void)didReceiveMemoryWarning {

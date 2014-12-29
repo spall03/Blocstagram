@@ -25,6 +25,7 @@
 
 @property (nonatomic, assign) BOOL isRefreshing;
 @property (nonatomic, assign) BOOL isLoadingOlderItems;
+@property (nonatomic, assign) BOOL thereAreNoMoreOlderMessages; //no more infinite scroll
 
 
 @end
@@ -47,31 +48,44 @@
     return @"cd3c2dc846a84f05a1f96cef123c5e25";
 }
 
+//infinite scroll
 - (void) requestOldItemsWithCompletionHandler:(BLCNewItemCompletionBlock)completionHandler {
-    if (self.isLoadingOlderItems == NO) {
+     if (self.isLoadingOlderItems == NO && self.thereAreNoMoreOlderMessages == NO) { //check to see if there are older items to load
         self.isLoadingOlderItems = YES;
         
-        // Need to add images here
         
-        self.isLoadingOlderItems = NO;
-        
-        if (completionHandler) {
-            completionHandler(nil);
-        }
+         NSString *maxID = [[self.mediaItems lastObject] idNumber]; //get the ID for the last image in the mediaItems array
+         NSDictionary *parameters = @{@"max_id": maxID};
+         
+         [self populateDataWithParameters:parameters completionHandler:^(NSError *error) { //start populating at the last image
+             self.isLoadingOlderItems = NO;
+             
+             if (completionHandler) { //???
+                 completionHandler(error);
+             }
+         }];
     }
 }
 
+//pull to refresh
 - (void) requestNewItemsWithCompletionHandler:(BLCNewItemCompletionBlock)completionHandler {
+    self.thereAreNoMoreOlderMessages = NO; //why would this necessarily change?
+    
     if (self.isRefreshing == NO) {
         self.isRefreshing = YES;
        
         //add images here
         
-        self.isRefreshing = NO;
+        NSString *minID = [[self.mediaItems firstObject] idNumber]; //get the ID for the first item in the mediaItems array
+        NSDictionary *parameters = @{@"min_id": minID};
         
-        if (completionHandler) {
-            completionHandler(nil);
-        }
+        [self populateDataWithParameters:parameters completionHandler:^(NSError *error) { //start populating at the first image
+            self.isRefreshing = NO;
+            
+            if (completionHandler) { //???
+                completionHandler(error);
+            }
+        }];
     }
 }
 
@@ -88,48 +102,64 @@
 
 - (void) registerForAccessTokenNotification {
     [[NSNotificationCenter defaultCenter] addObserverForName:BLCLoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        self.accessToken = note.object;
+        self.accessToken = note.object; //lets us know if Instagram is playing ball
         
-        [self populateDataWithParameters:nil];
+        [self populateDataWithParameters:nil completionHandler:nil];;
     }];
 }
 
 
 - (void) deleteMediaItem:(BLCMedia *)item {
-    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"]; //KVOs us into the mediaItems array
     [mutableArrayWithKVO removeObject:item];
 }
 
-- (void) populateDataWithParameters:(NSDictionary *)parameters {
+- (void) populateDataWithParameters:(NSDictionary *)parameters completionHandler:(BLCNewItemCompletionBlock)completionHandler {
     if (self.accessToken) {
         // only try to get the data if there's an access token
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
             // do the network request in the background, so the UI doesn't lock up
             
-            NSMutableString *urlString = [NSMutableString stringWithFormat:@"https://api.instagram.com/v1/users/self/feed?access_token=%@", self.accessToken];
+            NSMutableString *urlString = [NSMutableString stringWithFormat:@"https://api.instagram.com/v1/users/self/feed?access_token=%@", self.accessToken]; //building Instagram login URL string
             
             for (NSString *parameterName in parameters) {
                 // for example, if dictionary contains {count: 50}, append `&count=50` to the URL
-                [urlString appendFormat:@"&%@=%@", parameterName, parameters[parameterName]];
+                [urlString appendFormat:@"&%@=%@", parameterName, parameters[parameterName]]; //using Instagram's syntax for URL requests
             }
             
-            NSURL *url = [NSURL URLWithString:urlString];
+            NSURL *url = [NSURL URLWithString:urlString]; //build URL obj
             
             if (url) {
                 NSURLRequest *request = [NSURLRequest requestWithURL:url];
                 
                 NSURLResponse *response;
                 NSError *webError;
-                NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&webError];
+                NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&webError]; //passing by reference allows us to get multiple returns back from Instagram
                 
-                NSError *jsonError;
-                NSDictionary *feedDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
-                
-                if (feedDictionary) {
+                if (responseData) {
+                    NSError *jsonError;
+                    NSDictionary *feedDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
+                    //make dictionary out of Instagram's JSON object
+                    
+                    
+                    if (feedDictionary) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            // done networking, go back on the main thread
+                            [self parseDataFromFeedDictionary:feedDictionary fromRequestWithParameters:parameters]; //begin chopping apart the data dictionary
+                            if (completionHandler) {
+                                completionHandler(nil);
+                            }
+                        });
+                    } else if (completionHandler) { //JSON parsing error if no feedDictionary
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completionHandler(jsonError);
+                        });
+                    }
+                } else if (completionHandler) { //web error if no responseData
                     dispatch_async(dispatch_get_main_queue(), ^{
                         // done networking, go back on the main thread
-                        [self parseDataFromFeedDictionary:feedDictionary fromRequestWithParameters:parameters];
+                        completionHandler(webError);
                     });
                 }
             }
@@ -137,8 +167,73 @@
     }
 }
 
+- (void) downloadImageForMediaItem:(BLCMedia *)mediaItem {
+    if (mediaItem.mediaURL && !mediaItem.image) { //if not already downloaded and URL present
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSURLRequest *request = [NSURLRequest requestWithURL:mediaItem.mediaURL];
+            
+            NSURLResponse *response;
+            NSError *error;
+            NSData *imageData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+            
+            if (imageData) {
+                UIImage *image = [UIImage imageWithData:imageData]; //make UIImage out of UIData object wrapper
+                
+                if (image) {
+                    mediaItem.image = image;
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"]; //KVO new image into mediaItems array
+                        NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+                        [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
+                    });
+                }
+            } else {
+                NSLog(@"Error downloading image: %@", error);
+            }
+        });
+    }
+}
+
+//this chops up Instagram's JSON feed into stuff we can use
 - (void) parseDataFromFeedDictionary:(NSDictionary *) feedDictionary fromRequestWithParameters:(NSDictionary *)parameters {
-    NSLog(@"%@", feedDictionary);
+    NSArray *mediaArray = feedDictionary[@"data"]; //grabs each post
+    
+    NSMutableArray *tmpMediaItems = [NSMutableArray array];
+    
+    for (NSDictionary *mediaDictionary in mediaArray) { //for each Instagram post we pulled down
+        BLCMedia *mediaItem = [[BLCMedia alloc] initWithDictionary:mediaDictionary]; //make new Media object
+        
+        if (mediaItem) {
+            [tmpMediaItems addObject:mediaItem]; //add to temporary array
+            [self downloadImageForMediaItem:mediaItem]; //download picture
+        }
+    }
+    
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"]; //KVO into mediaItems array
+    
+    if (parameters[@"min_id"]) {
+        // This was a pull-to-refresh request
+        
+        NSRange rangeOfIndexes = NSMakeRange(0, tmpMediaItems.count); //indexes of all the new stuff
+        NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
+        
+        [mutableArrayWithKVO insertObjects:tmpMediaItems atIndexes:indexSetOfNewObjects]; //put in the new stuff via KVO
+    } else if (parameters[@"max_id"]) {
+        // This was an infinite scroll request
+        
+        if (tmpMediaItems.count == 0) {
+            // disable infinite scroll, since there are no more older messages. ???
+            self.thereAreNoMoreOlderMessages = YES;
+        }
+        
+        [mutableArrayWithKVO addObjectsFromArray:tmpMediaItems]; //???
+    
+    } else {
+        [self willChangeValueForKey:@"mediaItems"]; //KVO notification
+        self.mediaItems = tmpMediaItems;
+        [self didChangeValueForKey:@"mediaItems"];
+    }
 }
 
 #pragma mark - Key/Value Observing
