@@ -77,9 +77,19 @@
         //add images here
         
         NSString *minID = [[self.mediaItems firstObject] idNumber]; //get the ID for the first item in the mediaItems array
-        NSDictionary *parameters = @{@"min_id": minID};
+        NSDictionary *parameters = [NSDictionary new];
         
-        [self populateDataWithParameters:parameters completionHandler:^(NSError *error) { //start populating at the first image
+        if (minID != nil)
+        {
+            parameters = @{@"min_id": minID};
+        }
+        else //if mediaItems is empty, repopulate it as if the app were loading for the first time
+        {
+            parameters = nil;
+        }
+        
+        
+        [self populateDataWithParameters:parameters completionHandler:^(NSError *error) { //repopulate from Instagram
             self.isRefreshing = NO;
             
             if (completionHandler) { //???
