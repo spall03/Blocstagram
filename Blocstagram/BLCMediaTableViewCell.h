@@ -11,14 +11,19 @@
 #import "BLCComment.h"
 #import "BLCUser.h"
 
-@class BLCMedia;
+@class BLCMedia, BLCMediaTableViewCell;
+
+@protocol BLCMediaTableViewCellDelegate <NSObject>
+
+- (void)    cell:(BLCMediaTableViewCell *)cell didTapImageView:(UIImageView *)imageView;
+- (void)    cell:(BLCMediaTableViewCell *)cell didLongPressImageView:(UIImageView *)imageView;
+
+@end
 
 @interface BLCMediaTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) BLCMedia *mediaItem;
-//@property (nonatomic, strong) UIImageView *mediaImageView;
-//@property (nonatomic, strong) UILabel *usernameAndCaptionLabel;
-//@property (nonatomic, strong) UILabel *commentLabel;
+@property (nonatomic, weak) id <BLCMediaTableViewCellDelegate> delegate;
 
 + (CGFloat) heightForMediaItem:(BLCMedia *)mediaItem width:(CGFloat)width;
 
