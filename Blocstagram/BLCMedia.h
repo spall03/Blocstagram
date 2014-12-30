@@ -14,7 +14,7 @@
 
 
 
-@interface BLCMedia : NSObject
+@interface BLCMedia : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSString *idNumber;
 @property (nonatomic, strong) BLCUser *user;

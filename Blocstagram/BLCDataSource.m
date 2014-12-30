@@ -11,6 +11,8 @@
 #import "BLCMedia.h"
 #import "BLCComment.h"
 #import "BLCLoginViewController.h"
+#import <UICKeyChainStore.h>
+
 
 
 @interface BLCDataSource (){
@@ -104,7 +106,35 @@
     self = [super init];
     
     if (self) {
-        [self registerForAccessTokenNotification];
+        self.accessToken = [UICKeyChainStore stringForKey:@"access token"]; //grab token from keychain
+        
+        if (!self.accessToken)
+        {
+            [self registerForAccessTokenNotification]; //try again???
+        }
+        else
+        {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                NSString *fullPath = [self pathForFilename:NSStringFromSelector(@selector(mediaItems))];
+                NSArray *storedMediaItems = [NSKeyedUnarchiver unarchiveObjectWithFile:fullPath]; //load up stored items from disk
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (storedMediaItems.count > 0) {
+                        NSMutableArray *mutableMediaItems = [storedMediaItems mutableCopy];
+                        
+                        [self willChangeValueForKey:@"mediaItems"];
+                        self.mediaItems = mutableMediaItems;
+                        
+                        [self requestNewItemsWithCompletionHandler:nil];//automatically download new stuff after loading old stuff
+                        
+                        [self didChangeValueForKey:@"mediaItems"]; //notify as usual
+                    } else {
+                        [self populateDataWithParameters:nil completionHandler:nil]; //if no stored items, go to Instagram and download some
+                    }
+                });
+            });
+        }
     }
     
     return self;
@@ -113,6 +143,8 @@
 - (void) registerForAccessTokenNotification {
     [[NSNotificationCenter defaultCenter] addObserverForName:BLCLoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         self.accessToken = note.object; //lets us know if Instagram is playing ball
+        [UICKeyChainStore setString:self.accessToken forKey:@"access token"]; //save token in keychain
+        
         
         [self populateDataWithParameters:nil completionHandler:nil];;
     }];
@@ -244,6 +276,33 @@
         self.mediaItems = tmpMediaItems;
         [self didChangeValueForKey:@"mediaItems"];
     }
+    
+    if (tmpMediaItems.count > 0) {
+        // Write the changes to disk
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSUInteger numberOfItemsToSave = MIN(self.mediaItems.count, 50); //limited to 50 items
+            NSArray *mediaItemsToSave = [self.mediaItems subarrayWithRange:NSMakeRange(0, numberOfItemsToSave)];
+            
+            NSString *fullPath = [self pathForFilename:NSStringFromSelector(@selector(mediaItems))]; //make path
+            NSData *mediaItemData = [NSKeyedArchiver archivedDataWithRootObject:mediaItemsToSave]; //encode into data obj
+            
+            NSError *dataError;
+            BOOL wroteSuccessfully = [mediaItemData writeToFile:fullPath options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&dataError]; //attempt to write data
+            
+            if (!wroteSuccessfully) {
+                NSLog(@"Couldn't write file: %@", dataError); //log error if necessary
+            }
+        });
+        
+    }
+}
+
+//build full path string to find a filename
+- (NSString *) pathForFilename:(NSString *) filename {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths firstObject];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:filename];
+    return dataPath;
 }
 
 #pragma mark - Key/Value Observing
