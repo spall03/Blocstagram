@@ -47,6 +47,22 @@
     return self;
 }
 
+- (NSArray*) itemsToShare
+{
+
+    NSMutableArray* itemsToShare = [NSMutableArray new];
+
+    if (self.caption.length > 0) {
+        [itemsToShare addObject:self.caption];
+    }
+
+    if (self.image) {
+        [itemsToShare addObject:self.image];
+    }
+
+    return itemsToShare;
+}
+
 #pragma mark - NSCoding
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder {

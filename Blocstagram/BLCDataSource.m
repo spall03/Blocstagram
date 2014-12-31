@@ -265,11 +265,11 @@
         // This was an infinite scroll request
         
         if (tmpMediaItems.count == 0) {
-            // disable infinite scroll, since there are no more older messages. ???
+            // disable infinite scroll, since there are no more older messages.
             self.thereAreNoMoreOlderMessages = YES;
         }
         
-        [mutableArrayWithKVO addObjectsFromArray:tmpMediaItems]; //???
+        [mutableArrayWithKVO addObjectsFromArray:tmpMediaItems];
     
     } else {
         [self willChangeValueForKey:@"mediaItems"]; //KVO notification

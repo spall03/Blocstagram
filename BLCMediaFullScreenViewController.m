@@ -8,6 +8,7 @@
 
 #import "BLCMediaFullScreenViewController.h"
 #import "BLCMedia.h"
+#import "BLCMediaTableViewCell.h"
 
 @interface BLCMediaFullScreenViewController () <UIScrollViewDelegate>
 
@@ -47,16 +48,6 @@
     [self.scrollView addSubview:self.imageView]; //main view, scrollView, imageView
     self.scrollView.contentSize = self.media.image.size; //resize scrollView
     
-    //add share button
-    UIButton* newShareButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [newShareButton setTitle:NSLocalizedString(@"Share", @"share button") forState:UIControlStateNormal];
-    [newShareButton addTarget:self action:nil forControlEvents:UIControlEventTouchUpInside];
-    newShareButton.backgroundColor = [UIColor whiteColor];
-    [newShareButton sizeToFit];
-    [newShareButton setFrame:CGRectMake(self.imageView.image.size.width - newShareButton.frame.size.width - 10, newShareButton.frame.size.height, newShareButton.frame.size.width, newShareButton.frame.size.height)];
-    self.shareButton = newShareButton;
-    [self.imageView addSubview:self.shareButton];
-    
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
     
     self.doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapFired:)];
@@ -67,6 +58,26 @@
     [self.scrollView addGestureRecognizer:self.tap];
     [self.scrollView addGestureRecognizer:self.doubleTap];
     
+    //add share button
+    UIButton* newShareButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [newShareButton setTitle:NSLocalizedString(@"Share", @"share button") forState:UIControlStateNormal];
+    [newShareButton addTarget:self action:@selector(didTapShareButton) forControlEvents:UIControlEventTouchUpInside];
+    newShareButton.backgroundColor = [UIColor whiteColor];
+    [newShareButton sizeToFit];
+    [newShareButton setFrame:CGRectMake(self.imageView.image.size.width - newShareButton.frame.size.width - 10, newShareButton.frame.size.height, newShareButton.frame.size.width, newShareButton.frame.size.height)];
+    self.shareButton = newShareButton;
+    [self.imageView addSubview:self.shareButton];
+    
+}
+
+- (void) didTapShareButton {
+    
+    NSArray *itemsToShare = [self.media itemsToShare];
+    
+    if (itemsToShare.count > 0) {
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+        [self presentViewController:activityVC animated:YES completion:nil];
+    }
 }
 
 - (void) viewWillLayoutSubviews {

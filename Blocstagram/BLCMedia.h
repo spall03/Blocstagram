@@ -24,5 +24,6 @@
 @property (nonatomic, strong) NSArray *comments;
 
 - (instancetype) initWithDictionary:(NSDictionary *)mediaDictionary;
+- (NSArray*) itemsToShare;
 
 @end
