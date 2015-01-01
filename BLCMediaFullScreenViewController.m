@@ -53,6 +53,8 @@
     self.doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapFired:)];
     self.doubleTap.numberOfTapsRequired = 2;
     
+    
+    
     [self.tap requireGestureRecognizerToFail:self.doubleTap]; //insure that this is actually a single-tap
     
     [self.scrollView addGestureRecognizer:self.tap];

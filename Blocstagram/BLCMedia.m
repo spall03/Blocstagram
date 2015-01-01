@@ -23,6 +23,9 @@
         
         if (standardResolutionImageURL) {
             self.mediaURL = standardResolutionImageURL;
+            self.downloadState = BLCMediaDownloadStateNeedsImage;
+        } else {
+            self.downloadState = BLCMediaDownloadStateNonRecoverableError; //URL for image is broken for some reason
         }
         
         NSDictionary *captionDictionary = mediaDictionary[@"caption"];
@@ -73,6 +76,15 @@
         self.user = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(user))];
         self.mediaURL = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(mediaURL))];
         self.image = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(image))];
+        
+        if (self.image) {
+            self.downloadState = BLCMediaDownloadStateHasImage; //we're good w/ image
+        } else if (self.mediaURL) {
+            self.downloadState = BLCMediaDownloadStateNeedsImage; //we've got an ok URL but no image yet
+        } else {
+            self.downloadState = BLCMediaDownloadStateNonRecoverableError; //URL is screwed up
+        }
+        
         self.caption = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(caption))];
         self.comments = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(comments))];
     }
