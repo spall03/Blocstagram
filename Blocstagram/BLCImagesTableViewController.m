@@ -175,6 +175,16 @@
     }
 }
 
+
+//this method is called right before a cell is drawn, so we can fool around with its contents
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BLCMedia *mediaItem = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
+    if (mediaItem.downloadState == BLCMediaDownloadStateNeedsImage) { //check download state
+        [[BLCDataSource sharedInstance] downloadImageForMediaItem:mediaItem]; //and then download image if necessary
+    }
+}
+
 #pragma mark - BLCMediaTableViewCellDelegate
 
 - (void) cell:(BLCMediaTableViewCell *)cell didTapImageView:(UIImageView *)imageView {
@@ -196,6 +206,13 @@
         UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
         [self presentViewController:activityVC animated:YES completion:nil];
     }
+}
+
+- (void) cell:(BLCMediaTableViewCell *)cell didTwoFingerTapCellView:(UIImageView *)cellView {
+    
+    NSLog(@"two finger tap");
+    [[BLCDataSource sharedInstance] downloadImageForMediaItem:cell.mediaItem]; //I think this should work!
+    
 }
 
 #pragma mark - UIScrollViewDelegate
