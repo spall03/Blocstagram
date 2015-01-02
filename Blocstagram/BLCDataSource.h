@@ -24,6 +24,7 @@ typedef void (^BLCNewItemCompletionBlock)(NSError *error);
 - (void) deleteMediaItem:(BLCMedia *)item;
 - (void) downloadImageForMediaItem:(BLCMedia *)item;
 
+- (void) toggleLikeOnMediaItem:(BLCMedia *)mediaItem; //communicate like/unlike to Instagram
 
 - (void) requestNewItemsWithCompletionHandler:(BLCNewItemCompletionBlock)completionHandler;
 - (void) requestOldItemsWithCompletionHandler:(BLCNewItemCompletionBlock)completionHandler;

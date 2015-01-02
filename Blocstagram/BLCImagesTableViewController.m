@@ -148,6 +148,8 @@
 
 
 
+
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -213,6 +215,10 @@
     NSLog(@"two finger tap");
     [[BLCDataSource sharedInstance] downloadImageForMediaItem:cell.mediaItem]; //I think this should work!
     
+}
+
+- (void) cellDidPressLikeButton:(BLCMediaTableViewCell *)cell {
+    [[BLCDataSource sharedInstance] toggleLikeOnMediaItem:cell.mediaItem];
 }
 
 #pragma mark - UIScrollViewDelegate
