@@ -51,7 +51,7 @@
         self.likeState = userHasLiked ? BLCLikeStateLiked : BLCLikeStateNotLiked; //set animation/gfx flag accordingly
         
         
-        self.likeNumber = [mediaDictionary[@"data"][@"likes"][@"count"] integerValue]; //get number of likes upon loading for the first time
+        self.likeNumber = [mediaDictionary[@"likes"][@"count"] integerValue]; //get number of likes upon loading for the first time
         
     }
     

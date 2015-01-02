@@ -194,7 +194,7 @@ static NSParagraphStyle *paragraphStyle;
     self.likeLabelHeightConstraint.constant = likeLabelSize.height + 20;
     self.commentLabelHeightConstraint.constant = commentLabelSize.height + 20;
     
-    if (_mediaItem.image) {
+    if (_mediaItem.image && self.mediaItem.image.size.width != 0) {
         self.imageHeightConstraint.constant = self.mediaItem.image.size.height / self.mediaItem.image.size.width * CGRectGetWidth(self.contentView.bounds);
     } else {
         self.imageHeightConstraint.constant = 300; //in case there is no image

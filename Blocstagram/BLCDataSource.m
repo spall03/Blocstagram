@@ -348,6 +348,7 @@
         
         [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) { //inform instagram by POSTing urlString
             mediaItem.likeState = BLCLikeStateLiked;
+            mediaItem.likeNumber = mediaItem.likeNumber+1;
             [self reloadMediaItem:mediaItem]; //reload mediaItem
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             mediaItem.likeState = BLCLikeStateNotLiked;
@@ -360,6 +361,7 @@
         
         [self.instagramOperationManager DELETE:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) { //inform instagram by DELETEing urlString
             mediaItem.likeState = BLCLikeStateNotLiked;
+            mediaItem.likeNumber = mediaItem.likeNumber-1;
             [self reloadMediaItem:mediaItem];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             mediaItem.likeState = BLCLikeStateLiked;
@@ -369,33 +371,9 @@
     }
     
     [self reloadMediaItem:mediaItem];
-    [self getNumberOfLikesForMediaItem:mediaItem];
 }
 
-- (NSInteger) getNumberOfLikesForMediaItem:(BLCMedia *)mediaItem
-{
-    NSString *urlString = [NSString stringWithFormat:@"media/%@/likes", mediaItem.idNumber];
-    NSDictionary *parameters = @{@"access_token": self.accessToken};
-    __block NSInteger likeNumber = 0;
-    
-    [self.instagramOperationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) { //ask Instagram for list of users who liked mediaItem
-        
-        if ([responseObject isKindOfClass:[NSDictionary class]])
-        {
-            NSArray *userArray = responseObject[@"data"];
-            NSLog(@"response: %ld", userArray.count);
-            likeNumber = userArray.count; //number of users who liked it
-            
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        //operation failed
-        
-    }];
-    
-    return likeNumber;
-    
-}
+
 
 
 - (void) reloadMediaItem:(BLCMedia *)mediaItem {
