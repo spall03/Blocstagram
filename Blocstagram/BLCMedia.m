@@ -45,6 +45,14 @@
         }
         
         self.comments = commentsArray;
+        
+        BOOL userHasLiked = [mediaDictionary[@"user_has_liked"] boolValue]; //has the user already liked the picture on Instagram?
+        
+        self.likeState = userHasLiked ? BLCLikeStateLiked : BLCLikeStateNotLiked; //set animation/gfx flag accordingly
+        
+        
+        self.likeNumber = [mediaDictionary[@"data"][@"likes"][@"count"] integerValue]; //get number of likes upon loading for the first time
+        
     }
     
     return self;
@@ -87,6 +95,8 @@
         
         self.caption = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(caption))];
         self.comments = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(comments))];
+        self.likeState = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(likeState))];
+        self.likeNumber = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(likeNumber))];
     }
     
     return self;
@@ -99,6 +109,8 @@
     [aCoder encodeObject:self.image forKey:NSStringFromSelector(@selector(image))];
     [aCoder encodeObject:self.caption forKey:NSStringFromSelector(@selector(caption))];
     [aCoder encodeObject:self.comments forKey:NSStringFromSelector(@selector(comments))];
+    [aCoder encodeInteger:self.likeState forKey:NSStringFromSelector(@selector(likeState))];
+    [aCoder encodeInteger:self.likeNumber forKey:NSStringFromSelector(@selector(likeNumber))];
 }
 
 @end

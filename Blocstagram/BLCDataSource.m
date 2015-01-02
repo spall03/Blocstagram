@@ -253,7 +253,7 @@
         
         if (mediaItem) {
             [tmpMediaItems addObject:mediaItem]; //add to temporary array
-//            [self downloadImageForMediaItem:mediaItem]; //download picture
+            [self downloadImageForMediaItem:mediaItem]; //download picture
         }
     }
     
@@ -334,6 +334,74 @@
 
 - (void) replaceObjectInMediaItemsAtIndex:(NSUInteger)index withObject:(id)object {
     [_mediaItems replaceObjectAtIndex:index withObject:object];
+}
+
+#pragma mark - Liking Media Items
+
+- (void) toggleLikeOnMediaItem:(BLCMedia *)mediaItem {
+    NSString *urlString = [NSString stringWithFormat:@"media/%@/likes", mediaItem.idNumber];
+    NSDictionary *parameters = @{@"access_token": self.accessToken};
+    
+    if (mediaItem.likeState == BLCLikeStateNotLiked) { //toggle from unliked to liked
+        
+        mediaItem.likeState = BLCLikeStateLiking;
+        
+        [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) { //inform instagram by POSTing urlString
+            mediaItem.likeState = BLCLikeStateLiked;
+            [self reloadMediaItem:mediaItem]; //reload mediaItem
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            mediaItem.likeState = BLCLikeStateNotLiked;
+            [self reloadMediaItem:mediaItem];
+        }];
+        
+    } else if (mediaItem.likeState == BLCLikeStateLiked) { //toggle from liked to unliked
+        
+        mediaItem.likeState = BLCLikeStateUnliking;
+        
+        [self.instagramOperationManager DELETE:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) { //inform instagram by DELETEing urlString
+            mediaItem.likeState = BLCLikeStateNotLiked;
+            [self reloadMediaItem:mediaItem];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            mediaItem.likeState = BLCLikeStateLiked;
+            [self reloadMediaItem:mediaItem];
+        }];
+        
+    }
+    
+    [self reloadMediaItem:mediaItem];
+    [self getNumberOfLikesForMediaItem:mediaItem];
+}
+
+- (NSInteger) getNumberOfLikesForMediaItem:(BLCMedia *)mediaItem
+{
+    NSString *urlString = [NSString stringWithFormat:@"media/%@/likes", mediaItem.idNumber];
+    NSDictionary *parameters = @{@"access_token": self.accessToken};
+    __block NSInteger likeNumber = 0;
+    
+    [self.instagramOperationManager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) { //ask Instagram for list of users who liked mediaItem
+        
+        if ([responseObject isKindOfClass:[NSDictionary class]])
+        {
+            NSArray *userArray = responseObject[@"data"];
+            NSLog(@"response: %ld", userArray.count);
+            likeNumber = userArray.count; //number of users who liked it
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        //operation failed
+        
+    }];
+    
+    return likeNumber;
+    
+}
+
+
+- (void) reloadMediaItem:(BLCMedia *)mediaItem {
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+    NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+    [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
 }
 
 @end
