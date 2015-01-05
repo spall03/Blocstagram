@@ -140,4 +140,21 @@
     return image;
 }
 
+//this method will fix an image's orientation, scale it properly, and then crop it, using the three methods above. 
+- (UIImage *) imageByScalingToSize:(CGSize)size andCroppingWithRect:(CGRect)rect
+{
+    UIImage *newImage = [[UIImage alloc]init];
+    
+    //first, fix the orientation
+    newImage = [self imageWithFixedOrientation];
+    
+    //second, resize the image
+    newImage = [newImage imageResizedToMatchAspectRatioOfSize:size];
+    
+    //third, crop the image
+    newImage = [newImage imageCroppedToRect:rect];
+    
+    return newImage;
+}
+
 @end
