@@ -248,17 +248,17 @@ static NSString * const reuseIdentifier = @"Cell";
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-    CGRect cellRect = cell.contentView.frame;
-    CGSize cellSize = cellRect.size;
-    
-    return cellSize;
-    
-}
+//- (CGSize)collectionView:(UICollectionView *)collectionView
+//                  layout:(UICollectionViewLayout *)collectionViewLayout
+//  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+//    CGRect cellRect = cell.contentView.frame;
+//    CGSize cellSize = cellRect.size;
+//    
+//    return cellSize;
+//    
+//}
 
 /*
 // Uncomment this method to specify if the specified item should be highlighted during tracking

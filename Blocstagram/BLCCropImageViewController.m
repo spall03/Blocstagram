@@ -16,6 +16,9 @@
 @property (nonatomic, strong) BLCCropBox *cropBox;
 @property (nonatomic, assign) BOOL hasLoadedOnce;
 
+@property (nonatomic, strong) UIToolbar *topView;
+@property (nonatomic, strong) UIToolbar *bottomView;
+
 @end
 
 @implementation BLCCropImageViewController
@@ -28,6 +31,8 @@
         self.media.image = sourceImage;
         
         self.cropBox = [BLCCropBox new];
+        self.topView = [UIToolbar new];
+        self.bottomView = [UIToolbar new];
     }
     
     return self;
@@ -39,8 +44,10 @@
     //fit into UI space
     self.view.clipsToBounds = YES;
     
-    //add crop box
+    //add crop box and UIToolbars
     [self.view addSubview:self.cropBox];
+    [self.view addSubview:self.topView];
+    [self.view addSubview:self.bottomView];
     
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Crop", @"Crop command") style:UIBarButtonItemStyleDone target:self action:@selector(cropPressed:)];
     
@@ -52,24 +59,47 @@
     
     self.view.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1];
     
+    //color UIToolbars
+    
+    UIColor *whiteBG = [UIColor colorWithWhite:1.0 alpha:.15];
+    self.topView.barTintColor = whiteBG;
+    self.bottomView.barTintColor = whiteBG;
+    self.topView.alpha = 0.5;
+    self.bottomView.alpha = 0.5; //translucent effect
+    
 }
 
 - (void) viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    CGRect cropRect = CGRectZero;
+//    CGRect cropRect = CGRectZero;
+//    
+//    //make the view square
+//    CGFloat edgeSize = MIN(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+//    cropRect.size = CGSizeMake(edgeSize, edgeSize);
+//    
+//    CGSize size = self.view.frame.size;
+//    
+//    //center crop box
+//    self.cropBox.frame = cropRect;
+//    self.cropBox.center = CGPointMake(size.width / 2, size.height / 2);
+//    self.scrollView.frame = self.cropBox.frame;
+//    self.scrollView.clipsToBounds = NO;
     
-    //make the view square
-    CGFloat edgeSize = MIN(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-    cropRect.size = CGSizeMake(edgeSize, edgeSize);
+    //position UIToolbars
+    CGFloat width = CGRectGetWidth(self.view.bounds);
+    self.topView.frame = CGRectMake(0, self.topLayoutGuide.length, width, 44);
     
-    CGSize size = self.view.frame.size;
+    CGFloat yOriginOfBottomView = CGRectGetMaxY(self.topView.frame) + width;
+    CGFloat heightOfBottomView = CGRectGetHeight(self.view.frame) - yOriginOfBottomView;
+    self.bottomView.frame = CGRectMake(0, yOriginOfBottomView, width, heightOfBottomView);
     
-    //center crop box
-    self.cropBox.frame = cropRect;
-    self.cropBox.center = CGPointMake(size.width / 2, size.height / 2);
+    //position cropbox relative to UIToolbars
+    self.cropBox.frame = CGRectMake(0, CGRectGetMaxY(self.topView.frame), width, width);
     self.scrollView.frame = self.cropBox.frame;
     self.scrollView.clipsToBounds = NO;
+
+    
     
     [self recalculateZoomScale];
     
