@@ -10,7 +10,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "BLCCropImageViewController.h"
 
-@interface BLCImageLibraryViewController () <BLCCropImageViewControllerDelegate>
+@interface BLCImageLibraryViewController () <BLCCropImageViewControllerDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) ALAssetsLibrary *library;
 
@@ -59,14 +59,14 @@ static NSString * const reuseIdentifier = @"Cell";
     [super viewWillLayoutSubviews];
     
     CGFloat width = CGRectGetWidth(self.view.frame);
-    CGFloat minWidth = 100;
+    CGFloat minWidth = 75;
     NSInteger divisor = width / minWidth;
     CGFloat cellSize = width / divisor;
     
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionViewLayout; //this looks odd to me. is this a variable cast???
     flowLayout.itemSize = CGSizeMake(cellSize, cellSize);
     flowLayout.minimumInteritemSpacing = 0;
-    flowLayout.minimumLineSpacing = 0;
+    flowLayout.minimumLineSpacing = 10;
     flowLayout.headerReferenceSize = CGSizeMake(width, 30);
 }
 
@@ -244,6 +244,20 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void) cropControllerFinishedWithImage:(UIImage *)croppedImage {
     [self.delegate imageLibraryViewController:self didCompleteWithImage:croppedImage];
+}
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    CGRect cellRect = cell.contentView.frame;
+    CGSize cellSize = cellRect.size;
+    
+    return cellSize;
+    
 }
 
 /*
