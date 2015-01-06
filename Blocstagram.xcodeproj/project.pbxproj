@@ -130,6 +130,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		856C206E1A5B123E0013CEDC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C67F63F41A48C9E700938D9D /* BLCUser.h */,
+				C67F63F51A48C9E700938D9D /* BLCUser.m */,
+				C67F63FA1A48CC4300938D9D /* BLCComment.h */,
+				C67F63FB1A48CC4300938D9D /* BLCComment.m */,
+				C67F63F71A48CB3300938D9D /* BLCMedia.h */,
+				C67F63F81A48CB3300938D9D /* BLCMedia.m */,
+				C67F63FD1A48CCC200938D9D /* BLCDataSource.h */,
+				C67F63FE1A48CCC200938D9D /* BLCDataSource.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		856C206F1A5B12480013CEDC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C6C1A26A1A54DA750094AF29 /* BLCLikeButton.h */,
+				C6C1A26B1A54DA750094AF29 /* BLCLikeButton.m */,
+				C6C1A2701A59EE2F0094AF29 /* BLCCameraToolbar.h */,
+				C6C1A2711A59EE2F0094AF29 /* BLCCameraToolbar.m */,
+				C6C1A2671A54D3EB0094AF29 /* BLCCircleSpinnerView.h */,
+				C6C1A2681A54D3EB0094AF29 /* BLCCircleSpinnerView.m */,
+				C6C1A26D1A573AD40094AF29 /* BLCComposeCommentView.h */,
+				C6C1A26E1A573AD40094AF29 /* BLCComposeCommentView.m */,
+				C67F64001A48E37F00938D9D /* BLCMediaTableViewCell.h */,
+				C67F64011A48E37F00938D9D /* BLCMediaTableViewCell.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		BCE5EB16FC46B4D970C7D45E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,36 +197,20 @@
 				C6C4C2F01A45472000FB5381 /* Images */,
 				C6C4C2CE1A45428400FB5381 /* AppDelegate.h */,
 				C6C4C2CF1A45428400FB5381 /* AppDelegate.m */,
-				C6C1A26A1A54DA750094AF29 /* BLCLikeButton.h */,
-				C6C1A26B1A54DA750094AF29 /* BLCLikeButton.m */,
-				C67F63F41A48C9E700938D9D /* BLCUser.h */,
-				C67F63F51A48C9E700938D9D /* BLCUser.m */,
+				856C206E1A5B123E0013CEDC /* Model */,
+				856C206F1A5B12480013CEDC /* Views */,
+				C6EEDA5C1A535325000A29F8 /* BLCMediaFullScreenAnimator.h */,
+				C6EEDA5D1A535325000A29F8 /* BLCMediaFullScreenAnimator.m */,
 				C6C1A2731A59F5090094AF29 /* BLCCameraViewController.h */,
 				C6C1A2741A59F5090094AF29 /* BLCCameraViewController.m */,
 				C6C1A2761A5A000B0094AF29 /* UIImage+BLCImageUtilities.h */,
 				C6C1A2771A5A000B0094AF29 /* UIImage+BLCImageUtilities.m */,
-				C6C1A2701A59EE2F0094AF29 /* BLCCameraToolbar.h */,
-				C6C1A2711A59EE2F0094AF29 /* BLCCameraToolbar.m */,
-				C6C1A2671A54D3EB0094AF29 /* BLCCircleSpinnerView.h */,
-				C6C1A2681A54D3EB0094AF29 /* BLCCircleSpinnerView.m */,
-				C6C1A26D1A573AD40094AF29 /* BLCComposeCommentView.h */,
-				C6C1A26E1A573AD40094AF29 /* BLCComposeCommentView.m */,
-				C67F63FA1A48CC4300938D9D /* BLCComment.h */,
-				C67F63FB1A48CC4300938D9D /* BLCComment.m */,
-				C67F63F71A48CB3300938D9D /* BLCMedia.h */,
-				C67F63F81A48CB3300938D9D /* BLCMedia.m */,
-				C6EEDA5C1A535325000A29F8 /* BLCMediaFullScreenAnimator.h */,
-				C6EEDA5D1A535325000A29F8 /* BLCMediaFullScreenAnimator.m */,
 				C6EEDA591A534D15000A29F8 /* BLCMediaFullScreenViewController.h */,
 				C6EEDA5A1A534D15000A29F8 /* BLCMediaFullScreenViewController.m */,
-				C67F63FD1A48CCC200938D9D /* BLCDataSource.h */,
-				C67F63FE1A48CCC200938D9D /* BLCDataSource.m */,
 				C6C4C3051A45482A00FB5381 /* BLCImagesTableViewController.h */,
 				C6C4C3061A45482A00FB5381 /* BLCImagesTableViewController.m */,
 				C6120E671A4E406E00A4B775 /* BLCLoginViewController.h */,
 				C6120E681A4E406E00A4B775 /* BLCLoginViewController.m */,
-				C67F64001A48E37F00938D9D /* BLCMediaTableViewCell.h */,
-				C67F64011A48E37F00938D9D /* BLCMediaTableViewCell.m */,
 				C6C4C2D11A45428400FB5381 /* ViewController.h */,
 				C6C4C2D21A45428400FB5381 /* ViewController.m */,
 				C6C4C2D41A45428400FB5381 /* Main.storyboard */,
