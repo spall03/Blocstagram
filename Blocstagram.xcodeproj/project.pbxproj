@@ -148,6 +148,8 @@
 		856C206F1A5B12480013CEDC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C6C1A2761A5A000B0094AF29 /* UIImage+BLCImageUtilities.h */,
+				C6C1A2771A5A000B0094AF29 /* UIImage+BLCImageUtilities.m */,
 				C6C1A26A1A54DA750094AF29 /* BLCLikeButton.h */,
 				C6C1A26B1A54DA750094AF29 /* BLCLikeButton.m */,
 				C6C1A2701A59EE2F0094AF29 /* BLCCameraToolbar.h */,
@@ -203,8 +205,6 @@
 				C6EEDA5D1A535325000A29F8 /* BLCMediaFullScreenAnimator.m */,
 				C6C1A2731A59F5090094AF29 /* BLCCameraViewController.h */,
 				C6C1A2741A59F5090094AF29 /* BLCCameraViewController.m */,
-				C6C1A2761A5A000B0094AF29 /* UIImage+BLCImageUtilities.h */,
-				C6C1A2771A5A000B0094AF29 /* UIImage+BLCImageUtilities.m */,
 				C6EEDA591A534D15000A29F8 /* BLCMediaFullScreenViewController.h */,
 				C6EEDA5A1A534D15000A29F8 /* BLCMediaFullScreenViewController.m */,
 				C6C4C3051A45482A00FB5381 /* BLCImagesTableViewController.h */,
@@ -323,6 +323,7 @@
 				TargetAttributes = {
 					C6C4C2C61A45428400FB5381 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = R876ALJQT6;
 					};
 					C6C4C2DF1A45428400FB5381 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -559,6 +560,7 @@
 			baseConfigurationReference = EC528687CA6E7F8B9F541E07 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Blocstagram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -570,6 +572,7 @@
 			baseConfigurationReference = 8B95D848366476AB06FF2E0B /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Blocstagram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -30,7 +30,7 @@
         self.imageView.contentMode = UIViewContentModeScaleAspectFit; //scale aspect ratio
         
         self.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10); //add padding
-        self.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+        self.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         
         self.likeButtonState = BLCLikeStateNotLiked;
     }

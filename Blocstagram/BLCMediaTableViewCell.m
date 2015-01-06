@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSLayoutConstraint *usernameAndCaptionLabelHeightConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *commentLabelHeightConstraint;
 @property (nonatomic, strong) NSLayoutConstraint *likeLabelHeightConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *likeButtonHeightConstraint;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *twoFingerTapGestureRecognizer;
@@ -129,7 +130,7 @@ static NSParagraphStyle *paragraphStyle;
         NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_mediaImageView, _usernameAndCaptionLabel, _commentLabel, _likeLabel, _likeButton, _commentView);
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_mediaImageView]|" options:kNilOptions metrics:nil views:viewDictionary]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_usernameAndCaptionLabel][_likeLabel][_likeButton(==38)]|" options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom metrics:nil views:viewDictionary]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_usernameAndCaptionLabel][_likeLabel][_likeButton(==38)]|" options:NSLayoutFormatAlignAllBottom metrics:nil views:viewDictionary]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_commentLabel]|" options:kNilOptions metrics:nil views:viewDictionary]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_commentView]|" options:kNilOptions metrics:nil views:viewDictionary]];
         
@@ -162,6 +163,14 @@ static NSParagraphStyle *paragraphStyle;
                                                                                     attribute:NSLayoutAttributeNotAnAttribute
                                                                                    multiplier:1
                                                                                      constant:100];
+        self.likeButtonHeightConstraint = [NSLayoutConstraint constraintWithItem:_likeButton
+                                                                      attribute:NSLayoutAttributeHeight
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:nil
+                                                                      attribute:NSLayoutAttributeNotAnAttribute
+                                                                     multiplier:1
+                                                                       constant:100];
+
         
         self.commentLabelHeightConstraint = [NSLayoutConstraint constraintWithItem:_commentLabel
                                                                          attribute:NSLayoutAttributeHeight
@@ -171,7 +180,7 @@ static NSParagraphStyle *paragraphStyle;
                                                                         multiplier:1
                                                                           constant:100];
         
-        [self.contentView addConstraints:@[self.imageHeightConstraint, self.usernameAndCaptionLabelHeightConstraint, self.likeLabelHeightConstraint, self.commentLabelHeightConstraint]];
+        [self.contentView addConstraints:@[self.imageHeightConstraint, self.usernameAndCaptionLabelHeightConstraint, self.likeLabelHeightConstraint, self.likeButtonHeightConstraint, self.commentLabelHeightConstraint]];
     }
     return self;
 }
@@ -197,9 +206,15 @@ static NSParagraphStyle *paragraphStyle;
     CGSize likeLabelSize = [self.likeLabel sizeThatFits:maxSize];
     CGSize commentLabelSize = [self.commentLabel sizeThatFits:maxSize];
     
-    
-    self.usernameAndCaptionLabelHeightConstraint.constant = usernameLabelSize.height + 20;
-    self.likeLabelHeightConstraint.constant = likeLabelSize.height + 20;
+    // !!!: Use the height that's bigger to get our labels aligned. We want them the same height to avoid that blocky look. We also get lazy and assume the like label and username/caption label will be taller than the like button
+    CGFloat labelHeight = usernameLabelSize.height;
+    if ( likeLabelSize.height > usernameLabelSize.height )
+    {
+        labelHeight = likeLabelSize.height;
+    }
+    self.usernameAndCaptionLabelHeightConstraint.constant = labelHeight + 20;
+    self.likeLabelHeightConstraint.constant = labelHeight + 20;
+    self.likeButtonHeightConstraint.constant = labelHeight + 20;
     self.commentLabelHeightConstraint.constant = commentLabelSize.height + 20;
     
     if (_mediaItem.image && self.mediaItem.image.size.width != 0) {
@@ -216,7 +231,7 @@ static NSParagraphStyle *paragraphStyle;
     _mediaItem = mediaItem;
     self.mediaImageView.image = _mediaItem.image;
     self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
-    NSString* likeString = [NSString stringWithFormat:@"%ld", _mediaItem.likeNumber]; //set likes label. why use _mediaItem vs. mediaItem here???
+    NSString* likeString = [NSString stringWithFormat:@"%ld", (long)_mediaItem.likeNumber]; //set likes label. why use _mediaItem vs. mediaItem here???
     self.likeLabel.text = likeString;
     self.commentLabel.attributedText = [self commentString];
     self.likeButton.likeButtonState = mediaItem.likeState;
