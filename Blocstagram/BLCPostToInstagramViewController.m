@@ -7,6 +7,7 @@
 //
 
 #import "BLCPostToInstagramViewController.h"
+#import "BLCFilterCollectionViewCell.h"
 
 @interface BLCPostToInstagramViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UIAlertViewDelegate, UIDocumentInteractionControllerDelegate>
 
@@ -82,7 +83,7 @@
         self.navigationItem.rightBarButtonItem = self.sendBarButton;
     }
     
-    [self.filterCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [self.filterCollectionView registerClass:[BLCFilterCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
     self.view.backgroundColor = [UIColor whiteColor];
     self.filterCollectionView.backgroundColor = [UIColor whiteColor];
@@ -138,41 +139,16 @@
 }
 
 //this gets called when a filter cell loads
-- (UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+- (BLCFilterCollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSInteger imageViewTag = 1000;
-    static NSInteger labelTag = 1001;
-    
-    UIImageView *thumbnail = (UIImageView *)[cell.contentView viewWithTag:imageViewTag];
-    UILabel *label = (UILabel *)[cell.contentView viewWithTag:labelTag];
-    
+    BLCFilterCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.filterCollectionView.collectionViewLayout;
-    CGFloat thumbnailEdgeSize = flowLayout.itemSize.width;
     
-    //makes a blank thumbnail
-    if (!thumbnail) {
-        thumbnail = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, thumbnailEdgeSize, thumbnailEdgeSize)];
-        thumbnail.contentMode = UIViewContentModeScaleAspectFill;
-        thumbnail.tag = imageViewTag;
-        thumbnail.clipsToBounds = YES;
-        
-        [cell.contentView addSubview:thumbnail];
-    }
-    
-    //makes an empty label
-    if (!label) {
-        label = [[UILabel alloc] initWithFrame:CGRectMake(0, thumbnailEdgeSize, thumbnailEdgeSize, 20)];
-        label.tag = labelTag;
-        label.textAlignment = NSTextAlignmentCenter;
-        label.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:10];
-        [cell.contentView addSubview:label];
-    }
-    
-    //grab the appropriate content and put it into the cell
-    thumbnail.image = self.filterImages[indexPath.row];
-    label.text = self.filterTitles[indexPath.row];
-    
+    UIImage* thumbnailImage = self.filterImages[indexPath.row];
+    NSString* thumbnailTitleText = self.filterTitles[indexPath.row];
+ 
+    [cell setupCellWithFlowLayout:flowLayout andThumbnail:thumbnailImage andTitle:thumbnailTitleText];
     return cell;
 }
 

@@ -24,6 +24,7 @@
 		C6C1A27E1A5B4F4F0094AF29 /* BLCCropImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A27D1A5B4F4F0094AF29 /* BLCCropImageViewController.m */; };
 		C6C1A2811A5B5B420094AF29 /* BLCImageLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A2801A5B5B420094AF29 /* BLCImageLibraryViewController.m */; };
 		C6C1A2841A5C92E70094AF29 /* BLCPostToInstagramViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A2831A5C92E70094AF29 /* BLCPostToInstagramViewController.m */; };
+		C6C1A2871A5DBB410094AF29 /* BLCFilterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A2861A5DBB410094AF29 /* BLCFilterCollectionViewCell.m */; };
 		C6C4C2CD1A45428400FB5381 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C4C2CC1A45428400FB5381 /* main.m */; };
 		C6C4C2D01A45428400FB5381 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C4C2CF1A45428400FB5381 /* AppDelegate.m */; };
 		C6C4C2D31A45428400FB5381 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C4C2D21A45428400FB5381 /* ViewController.m */; };
@@ -91,6 +92,8 @@
 		C6C1A2801A5B5B420094AF29 /* BLCImageLibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCImageLibraryViewController.m; sourceTree = "<group>"; };
 		C6C1A2821A5C92E70094AF29 /* BLCPostToInstagramViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCPostToInstagramViewController.h; sourceTree = "<group>"; };
 		C6C1A2831A5C92E70094AF29 /* BLCPostToInstagramViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCPostToInstagramViewController.m; sourceTree = "<group>"; };
+		C6C1A2851A5DBB410094AF29 /* BLCFilterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCFilterCollectionViewCell.h; sourceTree = "<group>"; };
+		C6C1A2861A5DBB410094AF29 /* BLCFilterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCFilterCollectionViewCell.m; sourceTree = "<group>"; };
 		C6C4C2C71A45428400FB5381 /* Blocstagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blocstagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C4C2CB1A45428400FB5381 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6C4C2CC1A45428400FB5381 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -207,6 +210,8 @@
 				C6EEDA5A1A534D15000A29F8 /* BLCMediaFullScreenViewController.m */,
 				C6C1A2821A5C92E70094AF29 /* BLCPostToInstagramViewController.h */,
 				C6C1A2831A5C92E70094AF29 /* BLCPostToInstagramViewController.m */,
+				C6C1A2851A5DBB410094AF29 /* BLCFilterCollectionViewCell.h */,
+				C6C1A2861A5DBB410094AF29 /* BLCFilterCollectionViewCell.m */,
 				C67F63FD1A48CCC200938D9D /* BLCDataSource.h */,
 				C67F63FE1A48CCC200938D9D /* BLCDataSource.m */,
 				C6C4C3051A45482A00FB5381 /* BLCImagesTableViewController.h */,
@@ -434,6 +439,7 @@
 				C6C4C2CD1A45428400FB5381 /* main.m in Sources */,
 				C6EEDA5E1A535325000A29F8 /* BLCMediaFullScreenAnimator.m in Sources */,
 				C6C4C3071A45482A00FB5381 /* BLCImagesTableViewController.m in Sources */,
+				C6C1A2871A5DBB410094AF29 /* BLCFilterCollectionViewCell.m in Sources */,
 				C67F63F61A48C9E700938D9D /* BLCUser.m in Sources */,
 				C6C1A2721A59EE2F0094AF29 /* BLCCameraToolbar.m in Sources */,
 				C67F63FF1A48CCC200938D9D /* BLCDataSource.m in Sources */,
