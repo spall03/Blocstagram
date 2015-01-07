@@ -14,6 +14,8 @@
 #import <UICKeyChainStore.h>
 #import <AFNetworking/AFNetworking.h>
 
+#define isPhone ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+
 
 
 @interface BLCDataSource (){
@@ -36,6 +38,8 @@
 @end
 
 @implementation BLCDataSource
+
+NSString *const BLCImageFinishedNotification = @"BLCImageFinishedNotification";
 
 + (instancetype) sharedInstance
 {

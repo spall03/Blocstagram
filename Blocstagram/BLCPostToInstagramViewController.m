@@ -8,6 +8,9 @@
 
 #import "BLCPostToInstagramViewController.h"
 #import "BLCFilterCollectionViewCell.h"
+#import "BLCDataSource.h"
+
+#define isPhone ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
 
 @interface BLCPostToInstagramViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UIAlertViewDelegate, UIDocumentInteractionControllerDelegate>
 
@@ -22,6 +25,8 @@
 
 @property (nonatomic, strong) UIButton *sendButton;
 @property (nonatomic, strong) UIBarButtonItem *sendBarButton;
+
+@property (nonatomic, strong) UIDocumentInteractionController *documentController;
 
 @end
 
@@ -381,22 +386,22 @@
         
         
         //then send instagram the file
-        UIDocumentInteractionController *documentController = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
-        documentController.UTI = @"com.instagram.exclusivegram";
+        self.documentController = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
+        self.documentController.UTI = @"com.instagram.exclusivegram";
         
-        documentController.delegate = self;
+        self.documentController.delegate = self;
         
         NSString *caption = [alertView textFieldAtIndex:0].text;
         
         if (caption.length > 0) {
-            documentController.annotation = @{@"InstagramCaption": caption}; //let instagram know about the caption
+            self.documentController.annotation = @{@"InstagramCaption": caption}; //let instagram know about the caption
         }
         
         //open up menu that offers user a choice to switch to instagram
         if (self.sendButton.superview) {
-            [documentController presentOpenInMenuFromRect:self.sendButton.bounds inView:self.sendButton animated:YES];
+            [self.documentController presentOpenInMenuFromRect:self.sendButton.bounds inView:self.sendButton animated:YES];
         } else {
-            [documentController presentOpenInMenuFromBarButtonItem:self.sendBarButton animated:YES];
+            [self.documentController presentOpenInMenuFromBarButtonItem:self.sendBarButton animated:YES];
         }
     }
 }
@@ -405,7 +410,7 @@
 
 //we're done sending the file to instagram
 - (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:BLCImageFinishedNotification object:self];
 }
 
 #pragma mark - Buttons
