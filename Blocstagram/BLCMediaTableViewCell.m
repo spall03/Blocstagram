@@ -73,7 +73,7 @@ static NSParagraphStyle *paragraphStyle;
     [layoutCell setNeedsLayout];
     [layoutCell layoutIfNeeded];
     
-    // Get the actual height required for the cell
+    // Get the actual height required for the media item in the cell
     return CGRectGetMaxY(layoutCell.commentView.frame);
 }
 
@@ -216,7 +216,7 @@ static NSParagraphStyle *paragraphStyle;
     _mediaItem = mediaItem;
     self.mediaImageView.image = _mediaItem.image;
     self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
-    NSString* likeString = [NSString stringWithFormat:@"%ld", _mediaItem.likeNumber]; //set likes label. why use _mediaItem vs. mediaItem here???
+    NSString* likeString = [NSString stringWithFormat:@"%ld", (long)_mediaItem.likeNumber]; //set likes label. why use _mediaItem vs. mediaItem here???
     self.likeLabel.text = likeString;
     self.commentLabel.attributedText = [self commentString];
     self.likeButton.likeButtonState = mediaItem.likeState;

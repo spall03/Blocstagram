@@ -25,13 +25,18 @@
 		C6C1A2811A5B5B420094AF29 /* BLCImageLibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A2801A5B5B420094AF29 /* BLCImageLibraryViewController.m */; };
 		C6C1A2841A5C92E70094AF29 /* BLCPostToInstagramViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A2831A5C92E70094AF29 /* BLCPostToInstagramViewController.m */; };
 		C6C1A2871A5DBB410094AF29 /* BLCFilterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A2861A5DBB410094AF29 /* BLCFilterCollectionViewCell.m */; };
+		C6C1A28B1A5DF3AC0094AF29 /* BLCUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A28A1A5DF3AC0094AF29 /* BLCUserTests.m */; };
+		C6C1A28D1A5DF63E0094AF29 /* BLCCommentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A28C1A5DF63E0094AF29 /* BLCCommentTests.m */; };
+		C6C1A28F1A5DF8620094AF29 /* BLCMediaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A28E1A5DF8620094AF29 /* BLCMediaTests.m */; };
+		C6C1A2911A5F2E1B0094AF29 /* instagramJSON.rtf in Resources */ = {isa = PBXBuildFile; fileRef = C6C1A2901A5F2E1B0094AF29 /* instagramJSON.rtf */; };
+		C6C1A2931A5F3A940094AF29 /* BLCComposeCommentViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A2921A5F3A940094AF29 /* BLCComposeCommentViewTest.m */; };
+		C6C1A2951A5F447E0094AF29 /* BLCMediaTableViewCellTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C1A2941A5F447E0094AF29 /* BLCMediaTableViewCellTest.m */; };
 		C6C4C2CD1A45428400FB5381 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C4C2CC1A45428400FB5381 /* main.m */; };
 		C6C4C2D01A45428400FB5381 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C4C2CF1A45428400FB5381 /* AppDelegate.m */; };
 		C6C4C2D31A45428400FB5381 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C4C2D21A45428400FB5381 /* ViewController.m */; };
 		C6C4C2D61A45428400FB5381 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6C4C2D41A45428400FB5381 /* Main.storyboard */; };
 		C6C4C2D81A45428400FB5381 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6C4C2D71A45428400FB5381 /* Images.xcassets */; };
 		C6C4C2DB1A45428400FB5381 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C6C4C2D91A45428400FB5381 /* LaunchScreen.xib */; };
-		C6C4C2E71A45428400FB5381 /* BlocstagramTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C4C2E61A45428400FB5381 /* BlocstagramTests.m */; };
 		C6C4C2FB1A45479000FB5381 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6C4C2F11A45479000FB5381 /* 1.jpg */; };
 		C6C4C2FC1A45479000FB5381 /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6C4C2F21A45479000FB5381 /* 2.jpg */; };
 		C6C4C2FD1A45479000FB5381 /* 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6C4C2F31A45479000FB5381 /* 3.jpg */; };
@@ -94,6 +99,12 @@
 		C6C1A2831A5C92E70094AF29 /* BLCPostToInstagramViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCPostToInstagramViewController.m; sourceTree = "<group>"; };
 		C6C1A2851A5DBB410094AF29 /* BLCFilterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCFilterCollectionViewCell.h; sourceTree = "<group>"; };
 		C6C1A2861A5DBB410094AF29 /* BLCFilterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCFilterCollectionViewCell.m; sourceTree = "<group>"; };
+		C6C1A28A1A5DF3AC0094AF29 /* BLCUserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCUserTests.m; sourceTree = "<group>"; };
+		C6C1A28C1A5DF63E0094AF29 /* BLCCommentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCCommentTests.m; sourceTree = "<group>"; };
+		C6C1A28E1A5DF8620094AF29 /* BLCMediaTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCMediaTests.m; sourceTree = "<group>"; };
+		C6C1A2901A5F2E1B0094AF29 /* instagramJSON.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = instagramJSON.rtf; sourceTree = "<group>"; };
+		C6C1A2921A5F3A940094AF29 /* BLCComposeCommentViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCComposeCommentViewTest.m; sourceTree = "<group>"; };
+		C6C1A2941A5F447E0094AF29 /* BLCMediaTableViewCellTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCMediaTableViewCellTest.m; sourceTree = "<group>"; };
 		C6C4C2C71A45428400FB5381 /* Blocstagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blocstagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C4C2CB1A45428400FB5381 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C6C4C2CC1A45428400FB5381 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -106,7 +117,6 @@
 		C6C4C2DA1A45428400FB5381 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		C6C4C2E01A45428400FB5381 /* BlocstagramTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlocstagramTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C4C2E51A45428400FB5381 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C6C4C2E61A45428400FB5381 /* BlocstagramTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlocstagramTests.m; sourceTree = "<group>"; };
 		C6C4C2F11A45479000FB5381 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
 		C6C4C2F21A45479000FB5381 /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
 		C6C4C2F31A45479000FB5381 /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpg; sourceTree = "<group>"; };
@@ -242,8 +252,13 @@
 		C6C4C2E31A45428400FB5381 /* BlocstagramTests */ = {
 			isa = PBXGroup;
 			children = (
-				C6C4C2E61A45428400FB5381 /* BlocstagramTests.m */,
 				C6C4C2E41A45428400FB5381 /* Supporting Files */,
+				C6C1A28A1A5DF3AC0094AF29 /* BLCUserTests.m */,
+				C6C1A28C1A5DF63E0094AF29 /* BLCCommentTests.m */,
+				C6C1A28E1A5DF8620094AF29 /* BLCMediaTests.m */,
+				C6C1A2901A5F2E1B0094AF29 /* instagramJSON.rtf */,
+				C6C1A2921A5F3A940094AF29 /* BLCComposeCommentViewTest.m */,
+				C6C1A2941A5F447E0094AF29 /* BLCMediaTableViewCellTest.m */,
 			);
 			path = BlocstagramTests;
 			sourceTree = "<group>";
@@ -384,6 +399,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6C1A2911A5F2E1B0094AF29 /* instagramJSON.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,7 +473,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C6C4C2E71A45428400FB5381 /* BlocstagramTests.m in Sources */,
+				C6C1A28B1A5DF3AC0094AF29 /* BLCUserTests.m in Sources */,
+				C6C1A28D1A5DF63E0094AF29 /* BLCCommentTests.m in Sources */,
+				C6C1A2951A5F447E0094AF29 /* BLCMediaTableViewCellTest.m in Sources */,
+				C6C1A28F1A5DF8620094AF29 /* BLCMediaTests.m in Sources */,
+				C6C1A2931A5F3A940094AF29 /* BLCComposeCommentViewTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
